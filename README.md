@@ -1,6 +1,6 @@
 # koa-flight-employee-frontend
 
-This project helps in understanding ReactJs concept. Koa-api-boilerplate is used for backend and few public API's.
+This project helps in understanding ReactJs concept. Koa-api-boilerplate(https://github.com/DanishSiddiq/koa-api-boilerplate) is used for backend and few public API's.
 
 **Features**
 * component definition and separation
