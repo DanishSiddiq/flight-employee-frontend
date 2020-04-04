@@ -5,11 +5,11 @@ This project helps in understanding ReactJs concept. Koa-api-boilerplate(https:/
 **Features**
 * component definition and separation
 * routes declartion - public and private
-* condition rendering
-* multiple hooks utilization 
-* services definition for accessing API's
-* models creation
-* storage utilization
+* conditional rendering
+* different hooks usage 
+* servicesimplementation for fetching from different API's
+* models definition and usage
+* auhtorization implementation
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
