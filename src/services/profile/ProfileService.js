@@ -17,16 +17,14 @@ export const login = async ({ email, password }) => {
           });
         
         responseCode = response.status;
+        const result = await response.json();
 
         if (response.ok) {
-            const result  = await response.json();
             isSuccess     = true;
-
-            return { isSuccess, responseCode, ...result };
         }
 
-        // custom error handling here
-        console.log('User cannot be loggedin');
+        return { isSuccess, responseCode, ...result };
+
     } catch (err) {
         //Throw the return payload
         console.log(err);
@@ -52,24 +50,22 @@ export const get = async ({ token }) => {
           });
         
         responseCode = response.status;
+        const result = await response.json();
 
         if (response.ok) {
-            // transform into model
-            const result = await response.json();
+            
             isSuccess    = true;
-
+            // transform into model
             user.firstName          = result.firstName;
             user.lastName           = result.lastName;
             user.email              = result.email;
             user.registrationNumber = result.registrationNumber;
             user.createdAt          = result.createdAt;
             user.updatedAt          = result.updatedAt;
-
-            return { isSuccess, responseCode, user };
         }
 
-        // custom error handling here
-        console.log('User cannot be fetched');
+        return { isSuccess, responseCode, user };
+
     } catch (err) {
         //Throw the return payload
         console.log(err);
