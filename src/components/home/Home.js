@@ -8,4 +8,4 @@ const AppInfo = () => {
     );
 }
 
-export default AppInfo;
+export default React.memo(AppInfo);

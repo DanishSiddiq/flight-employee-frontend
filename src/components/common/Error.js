@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Error = ({ errors }) => {
+
     if(!errors || errors.length === 0) {
         return (
             <div></div>
@@ -19,4 +20,4 @@ const Error = ({ errors }) => {
     );
 };
 
-export default Error;
+export default React.memo(Error);

@@ -74,4 +74,4 @@ const ProfileContainer = (props) => {
     );
 }
 
-export default ProfileContainer;
+export default React.memo(ProfileContainer);

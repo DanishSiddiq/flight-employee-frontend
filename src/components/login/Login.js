@@ -26,4 +26,4 @@ const Login = ({ email, password, onClickLogin }) => {
     );
 }
 
-export default Login;
+export default React.memo(Login);

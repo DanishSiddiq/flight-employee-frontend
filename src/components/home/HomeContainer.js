@@ -9,4 +9,4 @@ const HomeContainer = () => {
     );
 }
 
-export default HomeContainer;
+export default React.memo(HomeContainer);

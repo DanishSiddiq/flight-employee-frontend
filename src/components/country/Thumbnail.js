@@ -20,4 +20,4 @@ const Thumbnail = ({ country = null }) => {
     );
 };
 
-export default Thumbnail;
+export default React.memo(Thumbnail);

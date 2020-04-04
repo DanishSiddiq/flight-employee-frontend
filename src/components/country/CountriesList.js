@@ -17,4 +17,4 @@ const CountriesList = ({ countries = [] }) => {
     );
 };
 
-export default CountriesList;
+export default React.memo(CountriesList);

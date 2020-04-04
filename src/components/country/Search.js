@@ -31,4 +31,4 @@ const Search = ({ txtSearch, handleOnChange, handleSearchCountries, handleResetC
     )
 }
 
-export default Search;
+export default React.memo(Search);

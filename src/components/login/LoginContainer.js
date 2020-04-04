@@ -109,4 +109,4 @@ const LoginContainer = (props) => {
     );
 }
 
-export default LoginContainer;
+export default React.memo(LoginContainer);

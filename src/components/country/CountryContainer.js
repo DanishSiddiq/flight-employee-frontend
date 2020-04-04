@@ -78,4 +78,4 @@ const CountryContainer = () => {
     )
 };
 
-export default CountryContainer;
+export default React.memo(CountryContainer);

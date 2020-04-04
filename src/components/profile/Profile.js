@@ -20,4 +20,4 @@ const Profile = ({ user }) => {
     );
 }
 
-export default Profile;
+export default React.memo(Profile);
