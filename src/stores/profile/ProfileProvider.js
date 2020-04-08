@@ -20,7 +20,7 @@ const ProfileProvider = props => {
 
         // token is valid or not
         isTokenValid: false,
-    
+        
         /**
          * 
          */

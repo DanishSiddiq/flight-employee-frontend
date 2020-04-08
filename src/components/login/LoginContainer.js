@@ -9,10 +9,6 @@ import Error from '../common/Error';
 import CONSTANTS from '../../utils/constants';
 import cmn from '../../utils/common';
 
-// services
-import { get } from '../../services/profile/ProfileService';
-import { login } from '../../services/profile/ProfileService';
-
 // context
 import { ProfileContext } from '../../context/ProfileContext';
 
@@ -20,48 +16,32 @@ import { ProfileContext } from '../../context/ProfileContext';
 const LoginContainer = (props) => {
 
     const [isInProgress, setIsInProgress] = useState(true);
-    const [isTokenValid, setIsTokenValid] = useState(true);
-    const [errorMsg, setErrorMsg]         = useState([]);
-    const ProfileStore                    = useContext(ProfileContext);
+    const [errorMsg, setErrorMsg] = useState([]);
+    const ProfileStore = useContext(ProfileContext);
 
     const resetErrors = () => {
         //clear error messages 
         setErrorMsg([]);
     }
 
-    const getUser = () => {
-      const token = cmn.getData(true, CONSTANTS.PROFILE.ACCESS_TOKEN);
-      if(token){
-          get({ token })
-          .then( data => {
-              if(data.isSuccess) {
-                  setIsTokenValid(true);
-              } else {                   
-                  setIsTokenValid(false);
-                  cmn.removeData(true, CONSTANTS.PROFILE.ACCESS_TOKEN);
-              }
-
-              setIsInProgress(false);
-          });
-      }
-      else {
+    // get user on landing on this page to check that either previous token was valid or not
+    const getUser = async () => {
+        await ProfileStore.getUser();
         setIsInProgress(false);
-        setIsTokenValid(false);
-      }
     };
 
-    useEffect(getUser, []);
+    useEffect(() => { getUser(); }, []);
 
     const useFormInput = initialValue => {
         const [value, setValue] = useState(initialValue);
-       
+
         const handleChange = e => {
-          setValue(e.target.value);
+            setValue(e.target.value);
         }
 
         return {
-          value,
-          onChange: handleChange
+            value,
+            onChange: handleChange
         }
     };
 
@@ -69,40 +49,32 @@ const LoginContainer = (props) => {
         setErrorMsg(msgs);
     }
 
+    // on login click
     const onClickLogin = async () => {
 
         // reset fields before sending request to server
         resetErrors();
 
-        // check credentiala from server
-        const result = await login({ email: email.value, password: password.value});
-        if(result.isSuccess) {
-            const isSuccess = cmn.setData(true, CONSTANTS.PROFILE.ACCESS_TOKEN, result.token);
-            if(isSuccess) {
-                props.history.push('/profile');
-            } else {
-                pushErrorMessage(['Kindly update browser to support login feature']);
-            }
+        // get data from store
+        const result = await ProfileStore.loginUser({ email: email.value, password: password.value });
+        if (result.isSuccess) {
+            props.history.push('/profile');
         } else {
-            if(result.message) {
-                pushErrorMessage([result.message]);
-            } else {
-                pushErrorMessage(['Internal server errer. Kindly contact admin']);
-            }
-        }
+            pushErrorMessage([result.message]);
+        }        
     };
 
     const email = useFormInput('');
     const password = useFormInput('');
 
 
-    if(isInProgress){
-        return(
+    if (isInProgress) {
+        return (
             <div>Checking Authentication</div>
         )
     }
 
-    if(isTokenValid){
+    if (ProfileStore.isTokenValid) {
         return <Redirect to="/profle" />
     }
 
