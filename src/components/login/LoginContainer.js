@@ -5,10 +5,6 @@ import { Redirect } from 'react-router-dom';
 import Login from './Login';
 import Error from '../common/Error';
 
-// helpers
-import CONSTANTS from '../../utils/constants';
-import cmn from '../../utils/common';
-
 // context
 import { ProfileContext } from '../../context/ProfileContext';
 
@@ -30,7 +26,24 @@ const LoginContainer = (props) => {
         setIsInProgress(false);
     };
 
+    // on login click
+    const onClickLogin = async () => {
+
+        // reset fields before sending request to server
+        resetErrors();
+
+        // get data from store
+        const result = await ProfileStore.loginUser({ email: email.value, password: password.value });
+        if (result.isSuccess) {
+            props.history.push('/profile');
+        } else {
+            setErrorMsg([result.message]);
+        }        
+    };
+
+    // rendering
     useEffect(() => { getUser(); }, []);
+
 
     const useFormInput = initialValue => {
         const [value, setValue] = useState(initialValue);
@@ -45,24 +58,6 @@ const LoginContainer = (props) => {
         }
     };
 
-    const pushErrorMessage = (msgs) => {
-        setErrorMsg(msgs);
-    }
-
-    // on login click
-    const onClickLogin = async () => {
-
-        // reset fields before sending request to server
-        resetErrors();
-
-        // get data from store
-        const result = await ProfileStore.loginUser({ email: email.value, password: password.value });
-        if (result.isSuccess) {
-            props.history.push('/profile');
-        } else {
-            pushErrorMessage([result.message]);
-        }        
-    };
 
     const email = useFormInput('');
     const password = useFormInput('');
