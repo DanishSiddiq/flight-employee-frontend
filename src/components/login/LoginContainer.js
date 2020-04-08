@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 
 // custom components
@@ -13,12 +13,17 @@ import cmn from '../../utils/common';
 import { get } from '../../services/profile/ProfileService';
 import { login } from '../../services/profile/ProfileService';
 
+// context
+import { ProfileContext } from '../../context/ProfileContext';
+
+
 const LoginContainer = (props) => {
 
     const [isInProgress, setIsInProgress] = useState(true);
     const [isTokenValid, setIsTokenValid] = useState(true);
     const [errorMsg, setErrorMsg]         = useState([]);
-  
+    const ProfileStore                    = useContext(ProfileContext);
+
     const resetErrors = () => {
         //clear error messages 
         setErrorMsg([]);
