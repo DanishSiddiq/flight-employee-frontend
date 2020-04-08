@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 
+// mbox
+import { useObserver } from 'mobx-react';
+
 // custom components
 import Profile from './Profile';
 import Logout from './Logout';
@@ -12,7 +15,7 @@ const ProfileContainer = (props) => {
 
     const ProfileStore = useContext(ProfileContext);
 
-    const [isInProgress, setIsInProgress]   = useState(true);
+    const [isInProgress, setIsInProgress] = useState(true);
 
     // get user on landing on this page to check that either previous token was valid or not
     const getUser = async () => {
@@ -20,7 +23,7 @@ const ProfileContainer = (props) => {
         setIsInProgress(false);
     };
 
-    //use effect
+    // use effect
     useEffect(() => {
         getUser();
     }, []);
@@ -31,26 +34,22 @@ const ProfileContainer = (props) => {
     };
 
     // rendering conditions
-    if (isInProgress) {
-        return (
-            <div>Checking user session validtity.</div>
-        )
-    }
+    return useObserver(() => (
 
-    if (!ProfileStore.isTokenValid) {
-        return <Redirect to="/login" />
-    }
+        isInProgress 
+            ? <div>Checking user session validtity.</div>
+            : !ProfileStore.isTokenValid
+                ? <Redirect to="/login" />
+                : <div>
+                    <div>
+                        <Profile user={ProfileStore.user} />
+                    </div>
+                    <div>
+                        <Logout onClickLogout={onClickLogout} />
+                    </div>
+                </div>
 
-    return (
-        <div>
-            <div>
-                <Profile user={ProfileStore.user} />
-            </div>
-            <div>
-                <Logout onClickLogout={onClickLogout} />
-            </div>
-        </div>
-    );
+    ));
 }
 
 export default React.memo(ProfileContainer);

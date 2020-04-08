@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 
+// mbox
+import { useObserver } from 'mobx-react';
+
 // custom components
 import Login from './Login';
 import Error from '../common/Error';
@@ -9,42 +12,43 @@ import Error from '../common/Error';
 import { ProfileContext } from '../../context/ProfileContext';
 
 
-const LoginContainer = (props) => {
+const LoginContainer = () => {
 
-    const [isInProgress, setIsInProgress] = useState(true);
-    const [errorMsg, setErrorMsg] = useState([]);
     const ProfileStore = useContext(ProfileContext);
 
-    const resetErrors = () => {
-        //clear error messages 
-        setErrorMsg([]);
-    }
+    const [isInProgress, setIsInProgress]   = useState(true);
+    const [errorMsg, setErrorMsg]           = useState([]);
 
-    // get user on landing on this page to check that either previous token was valid or not
+    // use effects
+    useEffect(() => { getUser(); }, []);
+
+    // get user to check token validity on hard refresh of the page
     const getUser = async () => {
         await ProfileStore.getUser();
         setIsInProgress(false);
     };
 
-    // on login click
-    const onClickLogin = async () => {
+    // request store
+    const login =  async () => {
+        const result = await ProfileStore.loginUser({ email: email.value, password: password.value });
+        if (!result.isSuccess) {
+            setErrorMsg([result.msg]);
+        }
+    }
+
+    // login click
+    const onClickLogin = (e) => {
+
+        e.preventDefault();
 
         // reset fields before sending request to server
-        resetErrors();
+        setErrorMsg([]);
 
         // get data from store
-        const result = await ProfileStore.loginUser({ email: email.value, password: password.value });
-        if (result.isSuccess) {
-            props.history.push('/profile');
-        } else {
-            setErrorMsg([result.message]);
-        }        
+        login();
     };
 
-    // rendering
-    useEffect(() => { getUser(); }, []);
-
-
+    // container related attributes
     const useFormInput = initialValue => {
         const [value, setValue] = useState(initialValue);
 
@@ -57,28 +61,21 @@ const LoginContainer = (props) => {
             onChange: handleChange
         }
     };
-
-
     const email = useFormInput('');
     const password = useFormInput('');
 
 
-    if (isInProgress) {
-        return (
+    // rendering logic
+    return useObserver(() => (
+        isInProgress ?
             <div>Checking Authentication</div>
-        )
-    }
-
-    if (ProfileStore.isTokenValid) {
-        return <Redirect to="/profle" />
-    }
-
-    return (
-        <div>
-            <Error errors={errorMsg} />
-            <Login email={email} password={password} onClickLogin={onClickLogin} />
-        </div>
-    );
+            : ProfileStore.isTokenValid
+                ? <Redirect to="/profile" />
+                : <div>
+                    <Error errors={errorMsg} />
+                    <Login email={email} password={password} onClickLogin={onClickLogin} />
+                </div>
+    ));
 }
 
 export default React.memo(LoginContainer);

@@ -36,8 +36,8 @@ const ProfileProvider = props => {
 
                 const result = await get({ token });
                 if (result.isSuccess) {
-                    ProfileStore.isTokenValid = true;
-                    ProfileStore.user = result.user;
+                    ProfileStore.isTokenValid   = true;
+                    ProfileStore.user           = result.user; // memory leak, write transformer 
                 } // check here response code for multiple cases like network failure or in valid token
                 else {
                     // currently by default considering that token is invalid
@@ -64,7 +64,9 @@ const ProfileProvider = props => {
             if (result.isSuccess) {
                 isSuccess = cmn.setData(true, CONSTANTS.PROFILE.ACCESS_TOKEN, result.token);
                 if (isSuccess) {
-                    return { isSuccess, msg };
+                    // update token validity
+                    ProfileStore.isTokenValid   = true;
+                    return { isSuccess, msg };                    
                 } else {
                     msg = `Kindly update browser to support login feature`;
                 }
@@ -81,7 +83,8 @@ const ProfileProvider = props => {
 
         // action method add observer
         logout: async () => {
-            ProfileStore.isTokenValid = false;
+            ProfileStore.isTokenValid   = false;
+            ProfileStore.user.defaultValue();
             cmn.removeData(true, CONSTANTS.PROFILE.ACCESS_TOKEN);
         }
     }));

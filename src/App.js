@@ -9,6 +9,7 @@ import CountryContainer from './components/country/CountryContainer';
 import HomeContainer from './components/home/HomeContainer';
 import LoginContainer from './components/login/LoginContainer';
 import ProfileContainer from './components/profile/ProfileContainer';
+// import WrapperComponent from './components/profile/WrapperComponent';
 
 // routes
 import PrivateRoute from './components/routes/PrivateRoute';
@@ -38,9 +39,6 @@ function App() {
         </BrowserRouter>
       </div>
     </ProfileProvider>
-
-
-
   );
 }
 
