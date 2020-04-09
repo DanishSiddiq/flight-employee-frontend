@@ -46,6 +46,4 @@ const removeData = (isSessionBased, key) => {
     return null;
 }
 
-
-
 module.exports = { setData, getData, removeData };

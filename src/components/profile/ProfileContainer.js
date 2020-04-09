@@ -9,7 +9,7 @@ import Profile from './Profile';
 import Logout from './Logout';
 
 // context
-import { ProfileContext } from '../../context/ProfileContext';
+import { ProfileContext } from '../../context/Context';
 
 const ProfileContainer = (props) => {
 

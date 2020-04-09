@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+
+// mbox
+import { useObserver } from 'mobx-react';
 
 // custom components
 import Search from './Search';
 import CountriesList from './CountriesList';
 
-// services
-import { fetchAllCountries } from '../../services/country/CountryService';
+// context
+import { CountryContext } from '../../context/Context';
 
 // style
 import '../../style/custom.css';
 
 const CountryContainer = () => {
 
-    const [lstCountries, setLstCountries]               = useState([]);
-    const [lstSearchCountries, setLstSearchCountries]   = useState([]);
-    const [inputs, setInputs]                           = useState({ txtSearch: '' });
+    const CountryStore = useContext(CountryContext);
+
+    const [inputs, setInputs]           = useState({ txtSearch: '' });
+    const [inprogress, setInprogress]   = useState(true);
 
     /**
      * fetching all countries from service
      */
-    const fetchCountries = () => {
-        fetchAllCountries().then( data => {
-            setLstCountries(data);
-            setLstSearchCountries(data);
-        });
+    const fetchCountries = async () => {
+        await CountryStore.fetch();
+        setInprogress(false);
     };
 
     /**
@@ -31,9 +33,9 @@ const CountryContainer = () => {
      * @param {*} event 
      */
     const handleSearchCountries = (event) => {
-        const txt = inputs.txtSearch.trim().toLowerCase(); 
-        if (txt !== '') {
-            setLstSearchCountries( lstCountries.filter(country => country.name.toLowerCase().indexOf(txt) !== -1) );
+        const name = inputs.txtSearch.trim().toLowerCase();
+        if (name !== '') {
+            CountryStore.filterOptions.name = name;
         }
     }
 
@@ -42,8 +44,11 @@ const CountryContainer = () => {
      * @param {*} event 
      */
     const handleResetCountries = (event) => {
-        setInputs({ txtSearch: '' });
-        setLstSearchCountries(lstCountries);
+        const name = inputs.txtSearch.trim().toLowerCase();
+        if (name !== '') {
+            setInputs({ txtSearch: '' });
+            CountryStore.filterOptions.name = '';
+        }
     }
 
     /**
@@ -51,31 +56,35 @@ const CountryContainer = () => {
      * @param {*} event 
      */
     const handleOnChange = (event) => {
-        const newValue  = event.target.value;
+        const newValue = event.target.value;
         const inputName = event.target.name;
 
-        setInputs((prevState)=> {
-          return(
-              {
-                ...prevState,
-                [inputName]: newValue
-            }
-          );
+        setInputs((prevState) => {
+            return (
+                {
+                    ...prevState,
+                    [inputName]: newValue
+                }
+            );
         });
-    }
+    };
 
+    // use effects
+    useEffect(() => { fetchCountries(); }, []);
 
-    useEffect(fetchCountries, []);
+    return useObserver(() => (
 
-    return (
-        <div>
-            <Search txtSearch={inputs.txtSearch} 
+        inprogress
+            ? <div>Fetching countries from server</div>
+            : <div>
+                <Search txtSearch={inputs.txtSearch}
                     handleOnChange={handleOnChange}
                     handleSearchCountries={handleSearchCountries}
                     handleResetCountries={handleResetCountries} />
-            <CountriesList countries={lstSearchCountries}/>
-        </div>
-    )
+                <CountriesList
+                    countries={CountryStore.filter()} />
+            </div>
+    ));
 };
 
 export default React.memo(CountryContainer);

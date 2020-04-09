@@ -18,8 +18,8 @@ export const fetchAllCountries = async () => {
                 countryInfo.flag = res.flag;
                 arrCountries.push(countryInfo);
             });
-            arrCountries.push(...result);
-            return arrCountries;
+
+            return new Set(arrCountries);
         }
 
         // custom error handling here

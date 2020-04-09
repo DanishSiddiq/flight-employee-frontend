@@ -4,7 +4,7 @@ import React from 'react';
 import { useLocalStore } from 'mobx-react';
 
 // context
-import { ProfileContext } from '../../context/ProfileContext';
+import { ProfileContext } from '../../context/Context';
 
 // services
 import { get, login } from '../../services/profile/ProfileService';

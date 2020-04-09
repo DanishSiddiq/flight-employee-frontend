@@ -9,7 +9,7 @@ import Login from './Login';
 import Error from '../common/Error';
 
 // context
-import { ProfileContext } from '../../context/ProfileContext';
+import { ProfileContext } from '../../context/Context';
 
 
 const LoginContainer = () => {
@@ -18,9 +18,6 @@ const LoginContainer = () => {
 
     const [isInProgress, setIsInProgress]   = useState(true);
     const [errorMsg, setErrorMsg]           = useState([]);
-
-    // use effects
-    useEffect(() => { getUser(); }, []);
 
     // get user to check token validity on hard refresh of the page
     const getUser = async () => {
@@ -64,6 +61,9 @@ const LoginContainer = () => {
     const email = useFormInput('');
     const password = useFormInput('');
 
+
+    // use effects
+    useEffect(() => { getUser(); }, []);
 
     // rendering logic
     return useObserver(() => (
