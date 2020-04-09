@@ -3,12 +3,13 @@
 This project helps in understanding ReactJs concept. Koa-api-boilerplate(https://github.com/DanishSiddiq/koa-api-boilerplate) is used for backend and few public API's.
 
 **Features**
-* component definition and separation
+* component definition, separation and conditional rendering 
+* state manager mbox
+* stores implementation
 * routes declartion - public and private
-* conditional rendering
-* different hooks usage 
-* servicesimplementation for fetching from different API's
-* models definition and usage
+* hooks usage
+* services implementation for fetching from different API's
+* models definition
 * auhtorization implementation
 
 
