@@ -44,11 +44,8 @@ const CountryContainer = () => {
      * @param {*} event 
      */
     const handleResetCountries = (event) => {
-        const name = inputs.txtSearch.trim().toLowerCase();
-        if (name !== '') {
-            setInputs({ txtSearch: '' });
-            CountryStore.filterOptions.name = '';
-        }
+        setInputs({ txtSearch: '' });
+        CountryStore.filterOptions.name = '';
     }
 
     /**
