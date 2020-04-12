@@ -23,7 +23,7 @@ const CountryProvider = props => {
 
             const data = await fetchAllCountries();
 
-            if (data) {                
+            if (data) {
                 CountryStore.countries.push(...data);
             }
         },

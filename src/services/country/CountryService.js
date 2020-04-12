@@ -12,14 +12,15 @@ export const fetchAllCountries = async () => {
             // transform into model
             const result = await response.json();
             result.forEach(res => {
-                const countryInfo = new CountryInfo();
-                countryInfo.name = res.name;
+                const countryInfo   = new CountryInfo();                
+                countryInfo.name    = res.name;
                 countryInfo.capital = res.capital;
-                countryInfo.flag = res.flag;
+                countryInfo.flag    = res.flag;
+                
                 arrCountries.push(countryInfo);
             });
 
-            return new Set(arrCountries);
+            return arrCountries;
         }
 
         // custom error handling here
