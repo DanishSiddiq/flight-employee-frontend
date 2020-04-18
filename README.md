@@ -4,7 +4,7 @@ This project helps in understanding ReactJs concept. Koa-api-boilerplate(https:/
 
 **Features**
 * component definition, separation and conditional rendering 
-* state manager mbox
+* state manager mbox - complete hooks based
 * stores implementation
 * routes declartion - public and private
 * hooks usage
